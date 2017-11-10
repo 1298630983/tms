@@ -103,6 +103,12 @@ public class UserController {
             session.setAttribute("user",user);
             session.setAttribute("userName",userName);
             return "user";
+        } else if (userName == null || userName == "") {
+            request.setAttribute("error","用户名不能为空！");
+            return "fail";
+        } else if (userPwd == null || userPwd == "") {
+            request.setAttribute("error","密码不能为空！");
+            return "fail";
         }
         request.setAttribute("error", "用户名或密码错误");
         return "fail";
