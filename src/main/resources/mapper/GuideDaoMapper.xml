@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="team.jhz.tms.dao.GuideDao">
+    <!--总条数-->
+    <!--public Integer guideCountByQueryVo(QueryVo vo);-->
+    <select id="guideCountByQueryVo" parameterType="QueryVo"
+            resultType="Integer">
+        select count(1) from guide
+        <where>
+            <if test="guideName != null and guideName != ''">
+                guide_name like "%"#{guideName}"%"
+            </if>
+            <if test="guideLevel != null and guideLevel != ''">
+                and guide_level = #{guideLevel}
+            </if>
+            <if test="guideLanguage != null and guideLanguage != ''">
+                and guide_language = #{guideLanguage}
+            </if>
+        </where>
+    </select>
+
+    <!--结果集-->
+    <!--public List<Guide> selectGuideListByQueryVo(QueryVo vo);-->
+    <select id="selectGuideListByQueryVo" parameterType="QueryVo"
+            resultType="Guide">
+        select
+        a.guide_id,
+        a.guide_name,
+        b.dict_item_name guide_level,
+        c.dict_item_name guide_language,
+        a.guide_phone,
+        a.guide_mobile,
+        a.guide_address,
+        a.guide_createtime
+        from
+        guide a
+        LEFT JOIN base_dict b ON a.guide_level = b.dict_id
+        LEFT JOIN base_dict c ON a.guide_language = c.dict_id
+        <where>
+            <if test="guideName != null and guideName != ''">
+                guide_name like "%"#{guideName}"%"
+            </if>
+            <if test="guideLevel != null and guideLevel != ''">
+                and guide_level = #{guideLevel}
+            </if>
+            <if test="guideLanguage != null and guideLanguage != ''">
+                and guide_language = #{guideLanguage}
+            </if>
+        </where>
+        limit #{start},#{rows}
+    </select>
+
+    <!--通过id查询-->
+    <!--public Guide selectGuideById(Integer id);-->
+    <select id="selectGuideById" parameterType="Integer"
+            resultType="Guide">
+        select
+        *
+        from guide
+        <where>
+            guide_id = #{guide_id}
+        </where>
+    </select>
+
+    <!--通过id修改-->
+    <!--public void updateGuideById(Guide Guide);-->
+    <update id="updateGuideById" parameterType="Guide">
+        UPDATE `guide`
+        SET
+        <if test="guide_name !=null and guide_name != ''">
+            `guide_name` = #{guide_name},
+        </if>
+        <if test="guide_level !=null and guide_level != ''">
+            `guide_level` = #{guide_level},
+        </if>
+        <if test="guide_language !=null and guide_language != ''">
+            `guide_language` = #{guide_language},
+        </if>
+        <if test="guide_phone !=null and guide_phone != ''">
+            `guide_phone` = #{guide_phone},
+        </if>
+        <if test="guide_mobile !=null and guide_mobile != ''">
+            `guide_mobile` = #{guide_mobile},
+        </if>
+        <if test="guide_address !=null and guide_address != ''">
+            `guide_address` = #{guide_address},
+        </if>
+        `guide_createtime` = NOW()
+        WHERE
+        (`guide_id` = #{guide_id});
+    </update>
+
+    <!--通过id删除-->
+    <!--public void deleteGuideById(Integer id);-->
+    <delete id="deleteGuideById" parameterType="Integer">
+        DELETE FROM guide
+        WHERE
+        guide_id = #{guide_id}
+    </delete>
+
+    <!--通过id增加-->
+    <!--public void addGuideById(Guide Guide);-->
+    <insert id="addGuideById" parameterType="Guide">
+        INSERT INTO guide
+        (guide_id,
+        guide_name ,
+        guide_level ,
+        guide_language ,
+        guide_phone ,
+        guide_mobile ,
+        guide_address ,
+        guide_createtime)
+        VALUES
+        (#{guide_id},#{guide_name},#{guide_level},#{guide_language},#{guide_phone},#{guide_mobile},#{guide_address},NOW())
+    </insert>
+
+
+</mapper>

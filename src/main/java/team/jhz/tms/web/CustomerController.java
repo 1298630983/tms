@@ -21,6 +21,7 @@ import java.util.List;
  * Created by Jason on 2017/10/26.
  */
 @Controller
+@RequestMapping("/customer")
 public class CustomerController {
 
     @Autowired
@@ -40,7 +41,7 @@ public class CustomerController {
 
 
     //入口
-    @RequestMapping(value = "/customer/list")
+    @RequestMapping(value = "/list")
     public String list(QueryVo vo, Model model) {
         List<BaseDict> fromType = baseDictService.selectBaseDictListByCode(CUSTOMER_FROM_TYPE);
         List<BaseDict> industryType = baseDictService.selectBaseDictListByCode(CUSTOMER_INDUSTRY_TYPE);
@@ -61,14 +62,14 @@ public class CustomerController {
     }
 
     //去修改页面
-    @RequestMapping(value = "/customer/edit.action")
+    @RequestMapping(value = "/edit.action")
     public @ResponseBody
     Customer edit(Integer id) {
         return customerService.selectCustomerById(id);
     }
 
     //保存修改
-    @RequestMapping(value = "/customer/update.action")
+    @RequestMapping(value = "/update.action")
     public @ResponseBody
     String update(Customer customer) {
         //修改
@@ -77,13 +78,30 @@ public class CustomerController {
     }
 
     //删除客户信息
-    @RequestMapping(value = "/customer/delete.action")
+    @RequestMapping(value = "/delete.action")
     public @ResponseBody
     String delete(Integer id) {
         //删除
         customerService.deleteCustomerById(id);
         return "OK";
     }
+
+    //去增加页面
+    @RequestMapping(value = "/add.action")
+    public @ResponseBody
+    Customer add(Integer id) {
+        return customerService.selectCustomerById(id);
+    }
+
+    //保存修改
+    @RequestMapping(value = "/addSave.action")
+    public @ResponseBody
+    String addSave(Customer customer) {
+        //增加
+        customerService.addCustomerById(customer);
+        return "OK";
+    }
+
 
 
 }

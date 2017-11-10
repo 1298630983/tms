@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="team.jhz.tms.dao.UserDao">
+
+    <!-- 总条数 -->
+    <!--public Integer userCountByQueryVo(QueryVo vo);-->
+    <select id="userCountByQueryVo" parameterType="QueryVo"
+            resultType="Integer">
+        select count(1) from user
+        <where>
+            <if test="userName != null and userName != ''">
+                user_name like "%"#{userName}"%"
+            </if>
+            <if test="userDep != null and userDep != ''">
+                and user_dep = #{userDep}
+            </if>
+            <if test="userLevel != null and userLevel != ''">
+                and user_level = #{userLevel}
+            </if>
+        </where>
+    </select>
+
+    <!-- 结果集 -->
+    <!--public List<User> selectUserListByQueryVo(QueryVo vo);-->
+    <select id="selectUserListByQueryVo" parameterType="QueryVo"
+            resultType="User">
+        select
+        a.user_id,
+        a.user_name,
+        a.user_pwd,
+        b.dict_item_name user_dep,
+        c.dict_item_name user_level,
+        a.user_doc,
+        a.user_mobile,
+        a.user_createtime
+        from
+        user a
+        LEFT JOIN base_dict b ON a.user_dep = b.dict_id
+        LEFT JOIN base_dict c ON a.user_level = c.dict_id
+        <where>
+            <if test="userName != null and userName != ''">
+                user_name like "%"#{userName}"%"
+            </if>
+            <if test="userDep != null and userDep != ''">
+                and user_dep = #{userDep}
+            </if>
+            <if test="userLevel != null and userLevel != ''">
+                and user_level = #{userLevel}
+            </if>
+        </where>
+        limit #{start},#{rows}
+    </select>
+
+    <!--通过id查询-->
+    <!--public User selectUserById(Integer id);-->
+    <select id="selectUserById" parameterType="Integer"
+            resultType="User">
+        select
+        *
+        from user
+        <where>
+            user_id = #{id}
+        </where>
+    </select>
+
+    <!--通过username查询-->
+    <!--public User selectUserByName(String username);-->
+    <select id="selectUserByName" parameterType="String" resultType="User">
+        SELECT
+        *
+        FROM user
+        <where>
+            user_name = #{user_name}
+        </where>
+    </select>
+
+    <!--通过id修改-->
+    <!--public void updateUserById(User user);-->
+    <update id="updateUserById" parameterType="User">
+        UPDATE `user`
+        SET
+        <if test="user_name !=null and user_name != ''">
+            `user_name` = #{user_name},
+        </if>
+        <if test="user_pwd !=null and user_pwd != ''">
+            `user_pwd` = #{user_pwd},
+        </if>
+        <if test="user_dep !=null and user_dep != ''">
+            `user_dep` = #{user_dep},
+        </if>
+        <if test="user_level !=null and user_level != ''">
+            `user_level` = #{user_level},
+        </if>
+        <if test="user_doc !=null and user_doc != ''">
+            `user_doc` = #{user_doc},
+        </if>
+        <if test="user_mobile !=null and user_mobile != ''">
+            `user_mobile` = #{user_mobile},
+        </if>
+        `user_createtime` = NOW()
+        WHERE
+        (`user_id` = #{user_id});
+    </update>
+
+    <!--通过id删除-->
+    <!--public void deleteUserById(Integer id);-->
+    <delete id="deleteUserById" parameterType="Integer">
+        DELETE FROM user
+        WHERE
+        user_id = #{user_id}
+    </delete>
+
+    <!--通过id增加-->
+    <!--public void addUserById(User user);-->
+    <insert id="addUserById" parameterType="User">
+        INSERT INTO user
+        (user_id,
+        user_name ,
+        user_pwd ,
+        user_dep ,
+        user_level ,
+        user_doc ,
+        user_mobile ,
+        user_createtime)
+        VALUES
+        (#{user_id},#{user_name},#{user_pwd},#{user_dep},#{user_level},#{user_doc},#{user_mobile},NOW())
+    </insert>
+
+</mapper>

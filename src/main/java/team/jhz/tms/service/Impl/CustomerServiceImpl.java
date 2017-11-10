@@ -68,5 +68,11 @@ public class CustomerServiceImpl implements CustomerService {
         customerDao.deleteCustomerById(id);
     }
 
+    //增加客户通过id
+    @Override
+    public void addCustomerById(Customer customer) {
+        customerDao.addCustomerById(customer);
+    }
+
 
 }

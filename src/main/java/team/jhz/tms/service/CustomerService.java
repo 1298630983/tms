@@ -26,4 +26,7 @@ public interface CustomerService {
 
     //通过id删除客户
     public void deleteCustomerById(Integer id);
+
+    //通过id增加客户
+    public void addCustomerById(Customer customer);
 }

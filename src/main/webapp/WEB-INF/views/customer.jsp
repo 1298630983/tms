@@ -189,10 +189,10 @@
 							</span>
 						</div> <!-- /input-group -->
 					</li>
-					<li><a href="customer.action" class="active"><i
-							class="fa fa-edit fa-fw"></i> 客户管理</a></li>
-					<li><a href="salevisit.action"><i
-							class="fa fa-dashboard fa-fw"></i> 系统管理</a></li>
+					<li><a href="/customer/list.action" class="active"><i class="fa fa-user fa-fw"></i> 客户管理</a></li>
+					<li><a href="/guide/list.action"><i class="fa fa-child fa-fw"></i> 导游管理</a></li>
+					<li><a href="/line/list.action"><i class="fa fa-bus fa-fw"></i> 线路管理</a></li>
+					<li><a href="/user/list.action"><i class="fa fa-dashboard fa-fw"></i> 用户管理</a></li>
 				</ul>
 			</div>
 			<!-- /.sidebar-collapse -->
@@ -242,6 +242,7 @@
 							</select>
 						</div>
 						<button type="submit" class="btn btn-primary">查询</button>
+						<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#customerAddDialog" onclick="addCustomer(${row.cust_id})">增加</a>
 					</form>
 				</div>
 			</div>
@@ -293,6 +294,98 @@
 		</div>
 		<!-- /#page-wrapper -->
 
+	</div>
+	<!-- 客户增加对话框 -->
+	<div class="modal fade" id="customerAddDialog" tabindex="-1" role="dialog"
+		 aria-labelledby="myModalLabel2">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel2">增加客户信息</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" id="add_customer_form">
+						<input type="hidden" id="add_cust_id" name="cust_id"/>
+						<div class="form-group">
+							<label for="add_customerName" class="col-sm-2 control-label">客户名称</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="add_customerName" placeholder="客户名称" name="cust_name">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="add_customerFrom" style="float:left;padding:7px 15px 0 27px;">客户来源</label>
+							<div class="col-sm-10">
+								<select	class="form-control" id="add_customerFrom" placeholder="客户来源" name="cust_source">
+									<option value="">--请选择--</option>
+									<c:forEach items="${fromType}" var="item">
+										<option value="${item.dict_id}"<c:if test="${item.dict_id == custSource}"> selected</c:if>>${item.dict_item_name }</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="add_custIndustry" style="float:left;padding:7px 15px 0 27px;">所属行业</label>
+							<div class="col-sm-10">
+								<select	class="form-control" id="add_custIndustry"  name="cust_industry">
+									<option value="">--请选择--</option>
+									<c:forEach items="${industryType}" var="item">
+										<option value="${item.dict_id}"<c:if test="${item.dict_id == custIndustry}"> selected</c:if>>${item.dict_item_name }</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="add_custLevel" style="float:left;padding:7px 15px 0 27px;">客户级别</label>
+							<div class="col-sm-10">
+								<select	class="form-control" id="add_custLevel" name="cust_level">
+									<option value="">--请选择--</option>
+									<c:forEach items="${levelType}" var="item">
+										<option value="${item.dict_id}"<c:if test="${item.dict_id == custLevel}"> selected</c:if>>${item.dict_item_name }</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="add_linkMan" class="col-sm-2 control-label">联系人</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="add_linkMan" placeholder="联系人" name="cust_linkman">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="add_phone" class="col-sm-2 control-label">固定电话</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="add_phone" placeholder="固定电话" name="cust_phone">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="add_mobile" class="col-sm-2 control-label">移动电话</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="add_mobile" placeholder="移动电话" name="cust_mobile">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="add_zipcode" class="col-sm-2 control-label">邮政编码</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="add_zipcode" placeholder="邮政编码" name="cust_zipcode">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="add_address" class="col-sm-2 control-label">联系地址</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="add_address" placeholder="联系地址" name="cust_address">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" onclick="addSaveCustomer()">保存修改</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	<!-- 客户编辑对话框 -->
 	<div class="modal fade" id="customerEditDialog" tabindex="-1" role="dialog"
@@ -428,6 +521,33 @@
         function updateCustomer() {
             $.post("<%=basePath%>customer/update.action",$("#edit_customer_form").serialize(),function(data){
                 alert("客户信息更新成功！");
+                window.location.reload();
+            });
+        }
+
+        function addCustomer(id) {
+            $.ajax({
+                type:"get",
+                url:"<%=basePath%>customer/add.action",
+                data:{"id":id},
+                success:function(data) {
+                    $("#add_cust_id").val(data.cust_id);
+                    $("#add_customerName").val(data.cust_name);
+                    $("#add_customerFrom").val(data.cust_source)
+                    $("#add_custIndustry").val(data.cust_industry)
+                    $("#add_custLevel").val(data.cust_level)
+                    $("#add_linkMan").val(data.cust_linkman);
+                    $("#add_phone").val(data.cust_phone);
+                    $("#add_mobile").val(data.cust_mobile);
+                    $("#add_zipcode").val(data.cust_zipcode);
+                    $("#add_address").val(data.cust_address);
+
+                }
+            });
+        }
+        function addSaveCustomer() {
+            $.post("<%=basePath%>customer/addSave.action",$("#add_customer_form").serialize(),function(data){
+                alert("客户信息增加成功！");
                 window.location.reload();
             });
         }

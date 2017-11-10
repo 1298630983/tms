@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="team.jhz.tms.dao.LineDao">
+    <!--总条数-->
+    <!--public Integer lineCountByQueryVo(QueryVo vo);-->
+    <select id="lineCountByQueryVo" parameterType="QueryVo"
+            resultType="Integer">
+        select count(1) from line
+        <where>
+            <if test="lineName != null and lineName != ''">
+                line_name like "%"#{lineName}"%"
+            </if>
+            <if test="lineType != null and lineType != ''">
+                and line_type = #{lineType}
+            </if>
+            <if test="lineDes != null and lineDes != ''">
+                and line_des = #{lineDes}
+            </if>
+        </where>
+    </select>
+
+    <!--结果集-->
+    <!--public List<Line> selectLineListByQueryVo(QueryVo vo);-->
+    <select id="selectLineListByQueryVo" parameterType="QueryVo"
+            resultType="Line">
+        select
+        a.line_id,
+        a.line_name,
+        b.dict_item_name line_type,
+        c.dict_item_name line_des,
+        a.line_days,
+        a.line_number,
+        a.line_createtime
+        from
+        line a
+        LEFT JOIN base_dict b ON a.line_type = b.dict_id
+        LEFT JOIN base_dict c ON a.line_des = c.dict_id
+        <where>
+            <if test="lineName != null and lineName != ''">
+                line_name like "%"#{lineName}"%"
+            </if>
+            <if test="lineType != null and lineType != ''">
+                and line_type = #{lineType}
+            </if>
+            <if test="lineDes != null and lineDes != ''">
+                and line_des = #{lineDes}
+            </if>
+        </where>
+        limit #{start},#{rows}
+    </select>
+
+    <!--通过id查询-->
+    <!--public Line selectLineById(Integer id);-->
+    <select id="selectLineById" parameterType="Integer"
+            resultType="Line">
+        select
+        *
+        from line
+        <where>
+            line_id = #{line_id}
+        </where>
+    </select>
+
+    <!--通过id修改-->
+    <!--public void updateLineById(Line Line);-->
+    <update id="updateLineById" parameterType="Line">
+        UPDATE `line`
+        SET
+        <if test="line_name !=null and line_name != ''">
+            `line_name` = #{line_name},
+        </if>
+        <if test="line_type !=null and line_type != ''">
+            `line_type` = #{line_type},
+        </if>
+        <if test="line_des !=null and line_des != ''">
+            `line_des` = #{line_des},
+        </if>
+        <if test="line_days !=null and line_days != ''">
+            `line_days` = #{line_days},
+        </if>
+        <if test="line_number !=null and line_number != ''">
+            `line_number` = #{line_number},
+        </if>
+        `line_createtime` = NOW()
+        WHERE
+        (`line_id` = #{line_id});
+    </update>
+
+    <!--通过id删除-->
+    <!--public void deleteLineById(Integer id);-->
+    <delete id="deleteLineById" parameterType="Integer">
+        DELETE FROM line
+        WHERE
+        line_id = #{line_id}
+    </delete>
+
+    <!--通过id增加-->
+    <!--public void addLineById(Line Line);-->
+    <insert id="addLineById" parameterType="Line">
+        INSERT INTO line
+        (line_id,
+        line_name ,
+        line_type ,
+        line_des ,
+        line_days ,
+        line_number ,
+        line_createtime)
+        VALUES
+        (#{line_id},#{line_name},#{line_type},#{line_des},#{line_days},#{line_number},NOW())
+    </insert>
+
+
+</mapper>

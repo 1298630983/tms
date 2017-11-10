@@ -4,7 +4,7 @@
          version="3.0">
     <display-name>tms 3.0 Web Application</display-name>
     <welcome-file-list>
-        <welcome-file>/views/customer.jsp</welcome-file>
+        <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
     <!--siteMesh 控制器 -->
     <filter>
@@ -102,5 +102,10 @@
         </servlet-mapping>
     <!--日志环境配置-->
     <!--公用环境配置:session-config,error_page,404,500-->
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/static/view/404.html</location>
+    </error-page>
 
 </web-app>
